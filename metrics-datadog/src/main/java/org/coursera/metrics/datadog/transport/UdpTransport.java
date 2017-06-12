@@ -29,15 +29,15 @@ public class UdpTransport implements Transport {
 
   private UdpTransport(String prefix, String statsdHost, int port, String[] globalTags) {
     statsd = new NonBlockingStatsDClient(
-            prefix,
-            statsdHost,
-            port,
-            globalTags,
-            new StatsDClientErrorHandler() {
-              public void handle(Exception e) {
-                LOG.error(e.getMessage(), e);
-              }
-            }
+        prefix,
+        Integer.MAX_VALUE,
+        globalTags,
+        new StatsDClientErrorHandler() {
+          public void handle(final Exception e) {
+            LOG.error(e.getMessage(), e);
+          }
+        },
+        NonBlockingStatsDClient.volatileAddressResolution(statsdHost, port)
     );
   }
 
